@@ -36,7 +36,7 @@
 	</li>
 	
 	<li>
-		<h2>Delete an Auction</h2>
+		<h2>Delete an Auction</h2> <% //TODO Delete Auction %>
 		<form action="deleteAuction.jsp" method="post">
 			
 		</form>

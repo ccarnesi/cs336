@@ -18,7 +18,7 @@
 			<a href="repEditAuction.jsp">Edit an Auction</a>
 		</li>
 		<li>
-			<a href="repEditBid.jsp">Edit a Bid</a>
+			<a href="repEditBid.jsp">Edit a Bid</a> <%//TODO Edit Bid functionality %>
 		</li>
 	</ul>
 </body>
