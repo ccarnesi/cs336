@@ -91,8 +91,7 @@ if(startDate.before(today)){
 			<br/><input type="submit" value="Set Alert">
 		</form>
 <%
-}
-if(end == false){
+}else if(end == false){
 	
 %>
 
