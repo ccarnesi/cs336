@@ -25,7 +25,7 @@
 		ps.setString(1, today);
 		ResultSet rs = ps.executeQuery();
 		%>
-	<table>
+	<table cellpadding="10">
 		<tr>
 			<td><u>User ID</u></td>
 			<td><u># of Auctions won</u></td>

@@ -25,7 +25,7 @@
 		ps.setString(1, today);
 		ResultSet rs = ps.executeQuery();
 		%>
-	<table>
+	<table cellpadding="10">
 		<tr>
 			<td><u>Category</u></td>
 			<td><u>Make</u></td>

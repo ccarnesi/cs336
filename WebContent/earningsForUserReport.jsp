@@ -23,24 +23,20 @@
 		
 		//formatting for currency
 		NumberFormat nf = NumberFormat.getCurrencyInstance();
-				
-		//parameters
-		String user = request.getParameter("user");
 		
-		PreparedStatement ps = con.prepareStatement("SELECT user_ID, SUM(win_bid) total FROM (SELECT Bid.user_ID, MAX(Bid.amt) win_bid FROM Auction, Bid, Item WHERE Bid.Auction_ID = Auction.auctionID AND Auction.item_ID = Item.itemID AND Auction.endDate < ? AND Bid.amt >= Auction.reservePrice GROUP BY Auction.auctionID) t WHERE user_ID =? GROUP BY user_ID ORDER BY total DESC");
+		PreparedStatement ps = con.prepareStatement("SELECT user_ID, SUM(win_bid) total FROM (SELECT Bid.user_ID, MAX(Bid.amt) win_bid FROM Auction, Bid, Item WHERE Bid.Auction_ID = Auction.auctionID AND Auction.item_ID = Item.itemID AND Auction.endDate < ? AND Bid.amt >= Auction.reservePrice GROUP BY Auction.auctionID) t GROUP BY user_ID ORDER BY total DESC");
 		ps.setString(1, today);
-		ps.setString(2, user);
 		ResultSet rs = ps.executeQuery();
 		%>
-	<table>
+	<table cellpadding="10">
 		<tr>
 			<td><u>User ID</u></td>
 			<td><u>Total Earnings</u></td>
 		</tr>
 		<%while (rs.next()) {%>
 		<tr>
-			<td><%= rs.getString("user_ID")%></td>
-			<td><%= nf.format(rs.getDouble("total"))%></td>
+			<td><%= rs.getString("user_ID") + "   "%></td>
+			<td><%= nf.format(rs.getDouble("total")) + "   "%></td>
 		</tr>
 		<%} 
 		rs.close();

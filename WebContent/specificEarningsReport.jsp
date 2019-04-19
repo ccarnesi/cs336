@@ -11,35 +11,21 @@
 	<h2>If the report is blank, there are no earnings</h2>
 	<ul>
 		<li>
-			<h3>Earnings for a specific Item</h3>
+			<h3>Earnings per item report</h3>
 			<form action="earningsForItemReport.jsp" method="post">
-				Category:<select name="category">
-					<option value="1">Motorcycle</option>
-					<option value="2">Truck</option>
-					<option value="3">Sedan</option>
-				</select> 
-				<br>Make:<input type="text" name="make" required>
-				<br>Model:<input type="text" name="model" required>
-				<br>Vehicle Year:<input type="text" name="year" required>
-				<br><input type="submit" value="Submit">
+				<input type="submit" value="Generate Report">
 			</form>
 		</li>
 		<li>
-			<h3>Earnings for a specific Category</h3>
+			<h3>Earnings per category report</h3>
 			<form action="earningsForCategoryReport.jsp" method="post">
-				Category:<select name="category">
-					<option value="1">Motorcycle</option>
-					<option value="2">Truck</option>
-					<option value="3">Sedan</option>
-				</select>
-				<br><input type="submit" value="Submit">
+				<input type="submit" value="Generate Report">
 			</form>
 		</li>
 		<li>
-			<h3>Earnings for a specific User</h3>
+			<h3>Earnings per user report</h3>
 			<form action="earningsForUserReport.jsp" method="post">
-				User ID:<input type="text" name="user" required>
-				<br><input type="submit" value="Submit">
+				<input type="submit" value="Generate Report">
 			</form>
 		</li>
 	</ul>

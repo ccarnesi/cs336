@@ -23,32 +23,20 @@
 		
 		//formatting for currency
 		NumberFormat nf = NumberFormat.getCurrencyInstance();
-				
-		//parameters
-		int raw = Integer.parseInt(request.getParameter("category"));
-		String category = "";
-		if (raw == 1) {
-			category = "Motorcycle";
-		} else if (raw == 2) {
-			category = "Truck";
-		} else {
-			category = "Sedan";
-		}
 		
-		PreparedStatement ps = con.prepareStatement("SELECT category, SUM(win_bid) total FROM (SELECT Item.category, MAX(Bid.amt) win_bid FROM Auction, Bid, Item WHERE Bid.Auction_ID = Auction.auctionID AND Auction.item_ID = Item.itemID AND Auction.endDate < ? AND Bid.amt >= Auction.reservePrice GROUP BY Auction.auctionID) t WHERE category =? GROUP BY category ORDER BY total DESC");
+		PreparedStatement ps = con.prepareStatement("SELECT category, SUM(win_bid) total FROM (SELECT Item.category, MAX(Bid.amt) win_bid FROM Auction, Bid, Item WHERE Bid.Auction_ID = Auction.auctionID AND Auction.item_ID = Item.itemID AND Auction.endDate < ? AND Bid.amt >= Auction.reservePrice GROUP BY Auction.auctionID) t GROUP BY category ORDER BY total DESC");
 		ps.setString(1, today);
-		ps.setString(2, category);
 		ResultSet rs = ps.executeQuery();
 		%>
-	<table>
+	<table cellpadding="10">
 		<tr>
 			<td><u>Category</u></td>
 			<td><u>Total Earnings</u></td>
 		</tr>
 		<%while (rs.next()) {%>
 		<tr>
-			<td><%= rs.getString("category")%></td>
-			<td><%= nf.format(rs.getDouble("total"))%></td>
+			<td><%= rs.getString("category")+ "   "%></td>
+			<td><%= nf.format(rs.getDouble("total"))+ "   "%></td>
 		</tr>
 		<%} 
 		rs.close();

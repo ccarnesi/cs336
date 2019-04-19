@@ -23,30 +23,12 @@
 		
 		//formatting for currency
 		NumberFormat nf = NumberFormat.getCurrencyInstance();
-				
-		//parameters
-		int raw = Integer.parseInt(request.getParameter("category"));
-		String category = "";
-		if (raw == 1) {
-			category = "Motorcycle";
-		} else if (raw == 2) {
-			category = "Truck";
-		} else {
-			category = "Sedan";
-		}
-		String make = request.getParameter("make");
-		String model = request.getParameter("model");
-		String year = request.getParameter("year");
 		
-		PreparedStatement ps = con.prepareStatement("SELECT category, make, model, vehicleYr, SUM(win_bid) total FROM (SELECT Item.category, Item.make, Item.model, Item.vehicleYr, MAX(Bid.amt) win_bid FROM Auction, Bid, Item WHERE Bid.Auction_ID = Auction.auctionID AND Auction.item_ID = Item.itemID AND Auction.endDate < ? AND Bid.amt >= Auction.reservePrice GROUP BY Auction.auctionID) t WHERE category =? AND make =? AND model =? AND vehicleYr =? GROUP BY category, make, model, vehicleYr ORDER BY total DESC");
+		PreparedStatement ps = con.prepareStatement("SELECT category, make, model, vehicleYr, SUM(win_bid) total FROM (SELECT Item.category, Item.make, Item.model, Item.vehicleYr, MAX(Bid.amt) win_bid FROM Auction, Bid, Item WHERE Bid.Auction_ID = Auction.auctionID AND Auction.item_ID = Item.itemID AND Auction.endDate < ? AND Bid.amt >= Auction.reservePrice GROUP BY Auction.auctionID) t GROUP BY category, make, model, vehicleYr ORDER BY total DESC");
 		ps.setString(1, today);
-		ps.setString(2, category);
-		ps.setString(3, make);
-		ps.setString(4, model);
-		ps.setString(5, year);
 		ResultSet rs = ps.executeQuery();
 		%>
-	<table>
+	<table cellpadding="10">
 		<tr>
 			<td><u>Category</u></td>
 			<td><u>Make</u></td>
@@ -56,11 +38,11 @@
 		</tr>
 		<%while (rs.next()) {%>
 		<tr>
-			<td><%= rs.getString("category")%></td>
-			<td><%= rs.getString("make")%></td>
-			<td><%= rs.getString("model")%></td>
-			<td><%= rs.getString("vehicleYr")%></td>
-			<td><%= nf.format(rs.getDouble("total"))%></td>
+			<td><%= rs.getString("category")+ "   "%></td>
+			<td><%= rs.getString("make")+ "   "%></td>
+			<td><%= rs.getString("model")+ "   "%></td>
+			<td><%= rs.getString("vehicleYr")+ "   "%></td>
+			<td><%= nf.format(rs.getDouble("total"))+ "   "%></td>
 		</tr>
 		<%} 
 		rs.close();
