@@ -13,13 +13,13 @@
 			<a href="totalEarningsReport.jsp">Total earnings from all completed auctions</a>
 		</li>
 		<li>
-			<a href="specificEarningsReport.jsp">Earnings per Item/Category/User</a> <%//TODO earnings per things %>
+			<a href="specificEarningsReport.jsp">Earnings per Item/Category/User</a>
 		</li>
 		<li>
 			<a href="bestSellingReport.jsp">Most sold items</a>
 		</li>
 		<li>
-			<a href="bestBuyerReport.jsp">Users with most won auctions</a> <%//TODO most won auctions %>
+			<a href="bestBuyerReport.jsp">Users with most won auctions</a>
 		</li>
 	</ul>
 </body>
