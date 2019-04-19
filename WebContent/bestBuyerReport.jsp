@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Best Selling Items</title>
+<title>Best Buyers Report</title>
 </head>
 <body>
 <%
@@ -21,24 +21,18 @@
 		java.util.Date dt = new java.util.Date();
 		String today = df.format(dt);
 		
-		PreparedStatement ps = con.prepareStatement("SELECT *, count(*) num FROM (SELECT Item.category, Item.make, Item.model, Item.vehicleYr FROM Auction, Bid, Item WHERE Bid.auction_ID = Auction.auctionID AND Auction.item_ID = Item.itemID AND Auction.endDate < ? AND Bid.amt >= Auction.reservePrice GROUP BY Auction.auctionID) t GROUP BY category, make, model, vehicleYr ORDER BY num DESC");
+		PreparedStatement ps = con.prepareStatement("SELECT user_ID, count(*) num FROM (SELECT Bid.user_ID FROM Auction, Bid WHERE Bid.auction_ID = Auction.auctionID AND Auction.endDate < ? AND Bid.amt >= Auction.reservePrice GROUP BY auctionID) t GROUP BY user_ID ORDER BY num DESC");
 		ps.setString(1, today);
 		ResultSet rs = ps.executeQuery();
 		%>
 	<table>
 		<tr>
-			<td><u>Category</u></td>
-			<td><u>Make</u></td>
-			<td><u>Model</u></td>
-			<td><u>Vehicle Year</u></td>
-			<td><u># of times sold</u></td>
+			<td><u>User ID</u></td>
+			<td><u># of Auctions won</u></td>
 		</tr>
 		<%while (rs.next()) { %>
 		<tr>
-			<td><%= rs.getString("category") %></td>
-			<td><%= rs.getString("make") %></td>
-			<td><%= rs.getString("model") %></td>
-			<td><%= rs.getString("vehicleYr") %></td>
+			<td><%= rs.getString("user_ID") %></td>
 			<td><%= rs.getString("num") %></td>
 		</tr>
 		<%} 
@@ -47,7 +41,7 @@
 		con.close();%>
 	</table>
 <%	} catch(Exception e) {
-		out.print("\nError generating item sales report: ");
+		out.print("\nError generating buyer sales report: ");
 		out.print(e);
 	}
 %>
