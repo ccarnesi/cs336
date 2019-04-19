@@ -21,6 +21,7 @@
 		java.util.Date dt = new java.util.Date();
 		String today = df.format(dt);
 		
+		//formatting for currency
 		NumberFormat nf = NumberFormat.getCurrencyInstance();
 		
 		PreparedStatement ps = con.prepareStatement("SELECT SUM(win_bid) total, count(*) num FROM (SELECT Auction.auctionID, Auction.title, Bid.user_ID, max(Bid.amt) win_bid FROM Auction, Bid WHERE Bid.auction_ID = Auction.auctionID AND endDate < ? AND Bid.amt >= Auction.reservePrice GROUP BY auctionID) t");
