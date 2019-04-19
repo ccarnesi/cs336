@@ -16,7 +16,7 @@
 			<a href="specificEarningsReport.jsp">Earnings per Item/Category/User</a> <%//TODO earnings per things %>
 		</li>
 		<li>
-			<a href="bestSellingReport.jsp">Most sold items</a> <%//TODO most sold items %>
+			<a href="bestSellingReport.jsp">Most sold items</a>
 		</li>
 		<li>
 			<a href="bestBuyerReport.jsp">Users with most won auctions</a> <%//TODO most won auctions %>
