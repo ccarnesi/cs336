@@ -13,7 +13,7 @@
 			<a href="adminEditAccess.jsp">Edit access level of a user</a>
 		</li>
 		<li>
-			<a href="adminGenerateReports.jsp">Generate reports</a> <%//TODO generate reports %>
+			<a href="adminGenerateReports.jsp">Generate reports</a>
 		</li>
 	</ul>
 </body>
