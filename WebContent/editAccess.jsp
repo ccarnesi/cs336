@@ -1,4 +1,3 @@
-<!-- Joel Kurian -->
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
@@ -16,33 +15,38 @@
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection con = DriverManager.getConnection(url, "cs336", "cs3362019");
 		
-		//getting parameters
+		//parameters
 		String username = request.getParameter("username");
-		String password = request.getParameter("password");
-		String confirm_password = request.getParameter("confirm_password");
+		int level = Integer.parseInt(request.getParameter("level"));
 		
-		//fail: password mismatch
-		if (!(password.equals(confirm_password))) {
-			out.print("Error: Passwords do not match\n");
+		PreparedStatement ps = con.prepareStatement("SELECT * from Accounts WHERE username =?");
+		ps.setString(1, username);
+		ResultSet rs = ps.executeQuery();
+		
+		//fail: user does not exist
+		if (!(rs.next())) {
+			out.print("Error: user does not exist\n");
 			
 		//fail: admin account	
 		} else if (username.equalsIgnoreCase("admin")) {
-			out.print("Error: Cannot edit admin account\n");
+			out.print("Error: cannot edit admin account"); 
 			
-		//success: will change account password
+		//success: will change access level of the account
 		} else {
-			PreparedStatement ps = con.prepareStatement("UPDATE Accounts SET pass =? WHERE username =?");
-			ps.setString(1, password);
+			ps.close();
+			ps = con.prepareStatement("UPDATE Accounts SET accessLevel =? WHERE username =?");
+			ps.setInt(1, level);
 			ps.setString(2, username);
 			
 			ps.executeUpdate();
-			out.print("Password changed");
-			ps.close();
+			out.print("Access level changed");
 		}
+		ps.close();
+		rs.close();
 		con.close();
-	} catch(Exception e) {
+	} catch (Exception e) {
+		out.print("\nError editing access level: ");
 		out.print(e);
-		out.print("\nAn Error occurred");
 	}
 %>
 </body>

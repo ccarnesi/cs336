@@ -25,7 +25,7 @@
 			out.print("Error: Usernames do not match\n");
 			
 		//fail: cant delete admin
-		} else if (user.equals("admin")) {
+		} else if (user.equalsIgnoreCase("admin")) {
 			out.print("Error: Cannot delete admin account\n");
 			
 		} else {

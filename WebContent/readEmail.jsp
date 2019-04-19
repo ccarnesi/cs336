@@ -32,8 +32,8 @@ Here is a list of Customer Representatives if you need assistance<br>
 		<%while (rs.next()) {%>
 			<tr>
 				<td><%= rs.getString("username") %></td>
-				<% } %>
 			</tr>
+			<% } %>
 		</table>
 		
 		<br>Write an Email<br>
