@@ -8,6 +8,7 @@
 <title>Specific Earnings Reports</title>
 </head>
 <body>
+	<h2>If the report is blank, there are no earnings</h2>
 	<ul>
 		<li>
 			<h3>Earnings for a specific Item</h3>
@@ -17,15 +18,15 @@
 					<option value="2">Truck</option>
 					<option value="3">Sedan</option>
 				</select> 
-				<br>Make:<input type="text" name="make">
-				<br>Model:<input type="text" name="model">
-				<br>Vehicle Year:<input type="text" name="year">
+				<br>Make:<input type="text" name="make" required>
+				<br>Model:<input type="text" name="model" required>
+				<br>Vehicle Year:<input type="text" name="year" required>
 				<br><input type="submit" value="Submit">
 			</form>
 		</li>
 		<li>
 			<h3>Earnings for a specific Category</h3>
-			<form action="earningsForCategoryReport.jsp" method="post"> <% //TODO category report %>
+			<form action="earningsForCategoryReport.jsp" method="post">
 				Category:<select name="category">
 					<option value="1">Motorcycle</option>
 					<option value="2">Truck</option>
@@ -37,7 +38,7 @@
 		<li>
 			<h3>Earnings for a specific User</h3>
 			<form action="earningsForUserReport.jsp" method="post"> <% //TODO user report %>
-				User ID:<input type="text" name="user">
+				User ID:<input type="text" name="user" required>
 				<br><input type="submit" value="Submit">
 			</form>
 		</li>

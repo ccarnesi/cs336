@@ -49,3 +49,16 @@ WHERE category =? --insert vehicle category
 	AND vehicleYr =? --insert vehicle year
 GROUP BY category, make, model, vehicleYr 
 ORDER BY total DESC
+
+--Total earnings for a specific category
+SELECT category, SUM(win_bid) total 
+FROM (SELECT Item.category, MAX(Bid.amt) win_bid 
+	  FROM Auction, Bid, Item 
+	  WHERE Bid.Auction_ID = Auction.auctionID 
+	  	AND Auction.item_ID = Item.itemID 
+	  	AND Auction.endDate < ? --insert current date
+	  	AND Bid.amt >= Auction.reservePrice 
+	  GROUP BY Auction.auctionID) t 
+WHERE category =? --insert vehicle category
+GROUP BY category
+ORDER BY total DESC
