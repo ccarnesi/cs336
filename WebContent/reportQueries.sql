@@ -62,3 +62,16 @@ FROM (SELECT Item.category, MAX(Bid.amt) win_bid
 WHERE category =? --insert vehicle category
 GROUP BY category
 ORDER BY total DESC
+
+--Total earnings for a specific user
+SELECT user_ID, SUM(win_bid) total 
+FROM (SELECT Bid.user_ID, MAX(Bid.amt) win_bid 
+	  FROM Auction, Bid, Item 
+	  WHERE Bid.Auction_ID = Auction.auctionID 
+	  	AND Auction.item_ID = Item.itemID 
+	  	AND Auction.endDate < ? --insert current date
+	  	AND Bid.amt >= Auction.reservePrice 
+	  GROUP BY Auction.auctionID) t 
+WHERE user_ID =? --insert buyer ID
+GROUP BY user_ID
+ORDER BY total DESC

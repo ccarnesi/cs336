@@ -37,7 +37,7 @@
 		</li>
 		<li>
 			<h3>Earnings for a specific User</h3>
-			<form action="earningsForUserReport.jsp" method="post"> <% //TODO user report %>
+			<form action="earningsForUserReport.jsp" method="post">
 				User ID:<input type="text" name="user" required>
 				<br><input type="submit" value="Submit">
 			</form>
