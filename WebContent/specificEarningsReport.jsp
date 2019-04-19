@@ -8,7 +8,8 @@
 <title>Specific Earnings Reports</title>
 </head>
 <body>
-	<h2>If the report is blank, there are no earnings</h2>
+	<h2>If a report is blank, there are no earnings</h2>
+	<h3>If a value is missing it has not produced any earnings</h3>
 	<ul>
 		<li>
 			<h3>Earnings per item report</h3>
