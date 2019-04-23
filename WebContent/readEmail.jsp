@@ -54,7 +54,7 @@ Here is a list of Customer Representatives if you need assistance<br>
 			
 			rs = ps.executeQuery();
 		%>
-		<table>
+		<table cellpaddinng="5">
 		<tr>
 			<td><u>sender</u></td>
 			<td><u>recipient</u></td>

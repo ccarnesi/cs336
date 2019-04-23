@@ -22,8 +22,8 @@
 %>
 	<br>Answer a question<br>
 	<form action="answerQuestion.jsp" method="post">
-		<br>recipient:<input type="text" name="questionID" required>
-		<br>content:<input type="text" name="answer" maxlength="250" required>
+		<br>QuestionID:<input type="text" name="questionID" required>
+		<br>Answer:<input type="text" name="answer" maxlength="250" required>
 		<br><input type="submit" value="Answer Question">
 	</form>
 	
