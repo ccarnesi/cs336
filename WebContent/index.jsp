@@ -15,10 +15,13 @@
 <center>
 	<ul>
 		<li>
-			<a href = "searchAuctions.jsp" >Search for an Item to Buy</a>
+			<a href = "BrowseItems.jsp" >Browse Items</a>
 		</li>
 		<li>
 			<a href = "createAuction.jsp" >Create an auction</a>
+		</li>
+		<li>
+			<a href = "notifiction.jsp" >Notification</a>
 		</li>
 		<li>
 			<a href = "readEmail.jsp" >Email</a>

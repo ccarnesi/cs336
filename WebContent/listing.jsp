@@ -73,7 +73,7 @@
 	if(today.before(endDate)){
 		end = false;
 	}
-if(startDate.before(today)){
+if(!startDate.before(today)){
 %>
 		<h2> <%= auctionRS.getString(2) %> </h2>
 			<br/>Category: <%= itemRS.getString(2) %>
@@ -86,8 +86,8 @@ if(startDate.before(today)){
 			<br/>Start Date: <%= auctionRS.getTimestamp(3) %>
 			<br/>End Date: <%= auctionRS.getTimestamp(4) %>
 			<br/>Seller: <%= auctionRS.getString(8) %>
-		<form action="setNotificationHandler.jsp?auctionID=<%= AuctionID %>" method="post">
-			<br/>Set alert when this becomes availble: <input type= "text" name="bidAttempt"/>
+		<form action="setNotificationHandler.jsp?auctionID=<%= AuctionID %>&startDate <%= auctionRS.getTimestamp(3)%>>" method="post">
+			<br/>Set alert when this becomes available
 			<br/><input type="submit" value="Set Alert">
 		</form>
 <%
