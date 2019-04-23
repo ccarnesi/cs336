@@ -20,6 +20,9 @@
 		<li>
 			<a href="repEditBid.jsp">Edit a Bid</a>
 		</li>
+		<li>
+			<a href="repAnswerQuestion.jsp">Answer a Customer's question</a>
+		</li>
 	</ul>
 </body>
 </html>

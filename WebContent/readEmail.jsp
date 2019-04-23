@@ -25,7 +25,7 @@ Here is a list of Customer Representatives if you need assistance<br>
 		
 		rs = ps.executeQuery();
 		%>
-		<table>
+		<table cellpadding="5">
 		<tr>
 			<td><u>username</u></td>
 		</tr>
