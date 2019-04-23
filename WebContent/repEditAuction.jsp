@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Alter an Auction</title>
 </head>
 <body>
 <ul>
@@ -38,7 +38,9 @@
 	<li>
 		<h2>Delete an Auction</h2>
 		<form action="deleteAuction.jsp" method="post">
-			
+			AuctionID:<input type="text" name="auctionID" required>
+			<br>Confirm AuctionID:<input type="text" name="confirm_auctionID" required>
+			<br><input type="submit" value="Submit">
 		</form>
 	</li>
 </ul>

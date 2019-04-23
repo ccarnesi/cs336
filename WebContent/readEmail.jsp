@@ -25,15 +25,15 @@ Here is a list of Customer Representatives if you need assistance<br>
 		
 		rs = ps.executeQuery();
 		%>
-		<table>
+		<table cellpadding="5">
 		<tr>
 			<td><u>username</u></td>
 		</tr>
 		<%while (rs.next()) {%>
 			<tr>
 				<td><%= rs.getString("username") %></td>
-				<% } %>
 			</tr>
+			<% } %>
 		</table>
 		
 		<br>Write an Email<br>
@@ -54,7 +54,7 @@ Here is a list of Customer Representatives if you need assistance<br>
 			
 			rs = ps.executeQuery();
 		%>
-		<table>
+		<table cellpaddinng="5">
 		<tr>
 			<td><u>sender</u></td>
 			<td><u>recipient</u></td>

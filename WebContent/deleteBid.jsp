@@ -16,44 +16,40 @@
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection con = DriverManager.getConnection(url, "cs336", "cs3362019");
 		
-		//getting parameters
-		String user = request.getParameter("username");
-		String confirm_user = request.getParameter("confirm_username");
+		//parameters
+		String bidID = request.getParameter("bidID");
+		String confirm_bidID = request.getParameter("confirm_bidID");
 		
 		//fail: not confirmed
-		if (!(user.equals(confirm_user))) {
-			out.print("Error: Usernames do not match\n");
-			
-		//fail: cant delete admin
-		} else if (user.equalsIgnoreCase("admin")) {
-			out.print("Error: Cannot delete admin account\n");
+		if (!(bidID.equals(confirm_bidID))) {
+			out.print("Error: bidIDs do not match");
 			
 		} else {
-			PreparedStatement ps = con.prepareStatement("SELECT username FROM Accounts WHERE username =? AND accessLevel > 1");
-			ps.setString(1, user);
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM Bid WHERE bidID =?");
+			ps.setString(1, bidID);
 			
 			ResultSet rs = ps.executeQuery();
 			
-			//fail: Customer rep cannot delete other Customer reps
-			if (rs.next()) {
-				out.print("Error: You do not have permission to delete this account\n");
+			//fail: bid does not exist
+			if (!(rs.next())) {
+				out.print("Error: Bid does not exist");
 				
-			//success: Account will be deleted
+			//success: bid will be deleted
 			} else {
 				ps.close();
-				ps = con.prepareStatement("DELETE FROM Accounts WHERE username =?");
-				ps.setString(1, user);
+				ps = con.prepareStatement("DELETE FROM Bid WHERE bidID =?");
+				ps.setString(1, bidID);
 				
 				ps.executeUpdate();
-				out.print("Account deleted");
+				out.print("Bid deleted");
 			}
 			ps.close();
 			rs.close();
 		}
 		con.close();
 	} catch (Exception e) {
+		out.print("\nError deleting Bid: ");
 		out.print(e);
-		out.print("\nAn Error occurred");
 	}
 %>
 </body>

@@ -51,7 +51,7 @@ try{
 			<td style="word-wrap: break-word"><%=faqRS.getString(2) %></td>
 			
 			
-		</tr>
+		
 		
 		<% if(faqRS.getString(3) != null)
 		{
@@ -63,7 +63,7 @@ try{
 		}
 		
 		%>
-		
+		</tr>
 		<%
 	}
 	%>

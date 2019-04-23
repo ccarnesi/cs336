@@ -16,44 +16,40 @@
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection con = DriverManager.getConnection(url, "cs336", "cs3362019");
 		
-		//getting parameters
-		String user = request.getParameter("username");
-		String confirm_user = request.getParameter("confirm_username");
+		//parameters
+		String auctionID = request.getParameter("auctionID");
+		String confirm = request.getParameter("confirm_auctionID");
 		
-		//fail: not confirmed
-		if (!(user.equals(confirm_user))) {
-			out.print("Error: Usernames do not match\n");
+		//fail: confirmation doesn't match
+		if (!(auctionID.equals(confirm))) {
+			out.print("Error: mismatched auctions");
 			
-		//fail: cant delete admin
-		} else if (user.equalsIgnoreCase("admin")) {
-			out.print("Error: Cannot delete admin account\n");
-			
+		//auction confirmed
 		} else {
-			PreparedStatement ps = con.prepareStatement("SELECT username FROM Accounts WHERE username =? AND accessLevel > 1");
-			ps.setString(1, user);
-			
+			PreparedStatement ps = con.prepareStatement("SELECT * FROM Auction WHERE auctionID =?");
+			ps.setString(1, auctionID);
 			ResultSet rs = ps.executeQuery();
 			
-			//fail: Customer rep cannot delete other Customer reps
-			if (rs.next()) {
-				out.print("Error: You do not have permission to delete this account\n");
+			//fail: auction doesn't exist
+			if (!(rs.next())) {
+				out.print("Error: Auction does not exist");
 				
-			//success: Account will be deleted
+			//success: auction will be deleted
 			} else {
 				ps.close();
-				ps = con.prepareStatement("DELETE FROM Accounts WHERE username =?");
-				ps.setString(1, user);
+				ps = con.prepareStatement("DELETE FROM Auction WHERE auctionID =?");
+				ps.setString(1, auctionID);
 				
 				ps.executeUpdate();
-				out.print("Account deleted");
+				out.print("Auction deleted");
 			}
 			ps.close();
 			rs.close();
 		}
 		con.close();
 	} catch (Exception e) {
+		out.print("\nError deleting Auction: ");
 		out.print(e);
-		out.print("\nAn Error occurred");
 	}
 %>
 </body>
