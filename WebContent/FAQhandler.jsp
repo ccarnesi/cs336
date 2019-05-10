@@ -23,7 +23,7 @@ insertQ.setString(2, user);
 
 
 //need to redirect to FAQ display page
-
+con.close();
 %>
 
 </head>

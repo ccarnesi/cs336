@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1" import="com.cs336.pkg.*"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
-<%@ page import="javax.servlet.http.*,javax.servlet.*"%>                                                "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page import="javax.servlet.http.*,javax.servlet.*"%>                                                
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -32,7 +32,7 @@ Class.forName("com.mysql.jdbc.Driver");
 int auction = Integer.parseInt(request.getParameter("auctionID"));
 String url = "jdbc:mysql://cs336db.c0apsnxemine.us-east-2.rds.amazonaws.com:3306/AuctionDatabase?zeroDateTimeBehavior=convertToNull";
 Connection conn = DriverManager.getConnection(url, "cs336", "cs3362019");
-PreparedStatement stmt = conn.prepareStatement("select Auction.title, Auction.startDate, Auction.endDate, Auction.initialPrice, Auction.reservePrice, Auction.minBidRaise, Auction.seller, Accounts.username, Bid.amt from Auction, Accounts, Bid where  Accounts.username= Bid.user_ID and Auction.auctionID = Bid.auction_ID and Auction.auctionID");
+PreparedStatement stmt = conn.prepareStatement("select Auction.title, Auction.startDate, Auction.endDate, Auction.initialPrice, Auction.reservePrice, Auction.minBidRaise, Auction.seller, Accounts.username, Bid.amt from Auction, Accounts, Bid where  Accounts.username= Bid.user_ID and Auction.auctionID = Bid.auction_ID and Auction.auctionID=?");
 stmt.setInt(1, auction);
 ResultSet rs=stmt.executeQuery();
 while(rs.next())

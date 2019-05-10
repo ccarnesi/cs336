@@ -29,6 +29,9 @@
 		<li>
 			<a href = "FAQdisplay.jsp" >FAQ</a>
 		</li>
+		<li>
+			<a href = "createFAQ.jsp" >Ask a question</a>
+		</li>
 		 <%if ((Integer)session.getAttribute("accessLevel") >= 2) {
 			 	//customer rep control panel
 				out.println("<li> <a href = \"customerRepControl.jsp\" >Customer Representatives Control Panel</a> </li>");
