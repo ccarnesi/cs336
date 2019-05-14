@@ -35,27 +35,38 @@
 				if(bidAttempt - currentPrice >= incrementPrice){
 					//good bid
 					//grab highest bid userID BEFORE new bid is placed
-					PreparedStatement bidQuery = con.prepareStatement("Select user_ID from Bid where auction_ID = ? ORDER BY amt DESC");
+					PreparedStatement bidQuery = con.prepareStatement("Select * from Bid where auction_ID = ? ORDER BY amt DESC");
 					bidQuery.setInt(1, auctionID);
 					bidRS = bidQuery.executeQuery(); 
 					
 					if(bidRS.next()){
-						String oldTopUserID = bidRS.getString(1); //user who was outbid and will be notified
+						String oldTopUserID = bidRS.getString(3); //user who was outbid and will be notified
+						int isAuto = bidRS.getInt(5);
+						if(isAuto ==0){
+							PreparedStatement manNotificInsert = con.prepareStatement("Insert into manNotific (usersID,manAuctionID) values (?,?)");
+							manNotificInsert.setString(1,oldTopUserID);
+							manNotificInsert.setInt(2,auctionID);
+						
+							manNotificInsert.executeUpdate();
+						}
 						//insert info to notifiy user they have bid outbid on their manual bid
-						PreparedStatement manNotificInsert = con.prepareStatement("Insert into manNotific (usersID,manAuctionID) values (?,?)");
-						manNotificInsert.setString(1,oldTopUserID);
-						manNotificInsert.setInt(2,auctionID);
-					
-						manNotificInsert.executeUpdate();
+						else
+							{
+							PreparedStatement autoNotific = con.prepareStatement("Insert into autoBidNotific (autoBid_username,autoBidAuctionID) values (?,?)");
+							autoNotific.setString(1, oldTopUserID);
+							autoNotific.setInt(2,auctionID);
+							autoNotific.executeUpdate();
+							
+							}
 						
 					}
 					
 					
-					PreparedStatement pst = con.prepareStatement("INSERT INTO Bid (auction_ID, user_ID, amt) Values(?,?,?)");
+					PreparedStatement pst = con.prepareStatement("INSERT INTO Bid (auction_ID, user_ID, amt, manOrAuto) Values(?,?,?,?)");
 					pst.setInt(1, auctionID);
 					pst.setString(2, bidder);
 					pst.setFloat(3,bidAttempt);
-					
+					pst.setInt(4,0);
 					
 					int res = pst.executeUpdate();
 					if(res<1){
@@ -66,15 +77,38 @@
 					autoBidpst.setInt(1, auctionID);
 					autoBidpst.setFloat(2, bidAttempt + incrementPrice);
 					ResultSet result = autoBidpst.executeQuery();
+					
 					if(!result.next()){
 						//no autobid setup so dont do anything
+						//NICK CODE GOES HERE
+						//bid table will have if auto or not...grab highestAuto.next and check if the bid was an auto bid or not
+						PreparedStatement checkUpper = con.prepareStatement("SELECT * FROM Bid where auction_ID=? ORDER BY amt DESC");
+						checkUpper.setInt(1, auctionID);
+						ResultSet highestAuto = checkUpper.executeQuery();
+						
+						if(highestAuto.next()) //then there is another row
+						{
+							int isAuto = highestAuto.getInt(5);
+						//grab user to be notified
+							String username = highestAuto.getString(3); 
+							if(isAuto == 1)
+							{
+								
+								PreparedStatement outbidUpper = con.prepareStatement("Insert into autoBidNotific (autoBid_username, autoBidAuctionID) Values(?,?)");
+								outbidUpper.setInt(2, auctionID);
+								outbidUpper.setString(1, username);
+								outbidUpper.executeUpdate();
+								
+							}
+						}
 					}else{
 						//autobid takes over so make bid
-						PreparedStatement Bidpst = con.prepareStatement("INSERT INTO Bid (auction_ID, user_ID, amt) Values(?,?,?)");
+						PreparedStatement Bidpst = con.prepareStatement("INSERT INTO Bid (auction_ID, user_ID, amt) Values(?,?,?,?)");
 						//grab these vals from result
 						Bidpst.setInt(1, auctionID);
 						Bidpst.setString(2, result.getString(4));
 						Bidpst.setFloat(3, bidAttempt + incrementPrice);
+						Bidpst.setInt(4,1);
 						
 						int BidpstRS = Bidpst.executeUpdate();
 						if(BidpstRS<1){
@@ -100,12 +134,29 @@
 				autoBidpst.setInt(1, auctionID);
 				ResultSet result = autoBidpst.executeQuery();
 				if(!result.next()){
+					
 					// place bid that is inc from current price and store autoBid in table
 					if(currentPrice + incrementPrice <= upperLimit){
-						PreparedStatement stmt = con.prepareStatement("INSERT INTO Bid (auction_ID, user_ID, amt) Values(?,?,?)");
+						PreparedStatement autoOutbidMan = con.prepareStatement("Select user_ID from Bid where auction_ID = ? ORDER BY amt DESC");
+						autoOutbidMan.setInt(1, auctionID);
+						ResultSet rs = autoOutbidMan.executeQuery();
+						if(!rs.next()){
+							out.print("fail here");
+						}else{
+							String oldTopUserID = rs.getString(1); //user who was outbid and will be notified
+							//insert info to notifiy user they have bid outbid on their manual bid
+							PreparedStatement manNotificInsert = con.prepareStatement("Insert into manNotific (usersID,manAuctionID) values (?,?)");
+							manNotificInsert.setString(1,oldTopUserID);
+							manNotificInsert.setInt(2,auctionID);
+							manNotificInsert.executeUpdate();
+							
+						}
+						
+						PreparedStatement stmt = con.prepareStatement("INSERT INTO Bid (auction_ID, user_ID, amt, manOrAuto) Values(?,?,?,?)");
 						stmt.setInt(1, auctionID);
 						stmt.setString(2, bidder);
 						stmt.setFloat(3, currentPrice + incrementPrice);
+						stmt.setInt(4,1);
 						
 						int res = stmt.executeUpdate();
 						if(res<1){
@@ -134,10 +185,11 @@
 						//set it to the upperlimit and award it to the person that holds topautobid
 						
 						//make bid at upper limit with bidder to the person who holds topautoBid
-						PreparedStatement stmt = con.prepareStatement("INSERT INTO Bid (auction_ID, user_ID, amt) Values(?,?,?)");
+						PreparedStatement stmt = con.prepareStatement("INSERT INTO Bid (auction_ID, user_ID, amt, manOrAuto) Values(?,?,?,?)");
 						stmt.setInt(1, auctionID);
 						stmt.setString(2, result.getString(4));
 						stmt.setFloat(3, upperLimit);
+						stmt.setInt(4,1);
 						int res = stmt.executeUpdate();
 						if(res<1){
 							out.println("Fail5");
@@ -162,17 +214,44 @@
 						String oldTopAutoUser = result.getString(4);
 					
 						if(topAutoBid> currentPrice){
+							PreparedStatement bidQuery = con.prepareStatement("Select * from Bid where auction_ID = ? ORDER BY amt DESC");
+							bidQuery.setInt(1, auctionID);
+							bidRS = bidQuery.executeQuery(); 
+							
+							if(bidRS.next()){
+							String oldTopUserID = bidRS.getString(3); //user who was outbid and will be notified
+							//insert info to notifiy user they have bid outbid on their manual bid
+							int isAuto = bidRS.getInt(5);
+							if(isAuto == 0)
+							{
+							PreparedStatement manNotificInsert = con.prepareStatement("Insert into manNotific (usersID,manAuctionID) values (?,?)");
+							manNotificInsert.setString(1,oldTopUserID);
+							manNotificInsert.setInt(2,auctionID);
+							
+							manNotificInsert.executeUpdate();
+							}
+							else
+							{
+							PreparedStatement autoNotific = con.prepareStatement("Insert into autoBidNotific (autoBid_username,autoBidAuctionID) values (?,?)");
+							autoNotific.setString(1, oldTopUserID);
+							autoNotific.setInt(2,auctionID);
+							autoNotific.executeUpdate();
+							
+							}
+						
+						}
 							//make bid at upper limit for person with topautobid
-							PreparedStatement stmt = con.prepareStatement("INSERT INTO Bid (auction_ID, user_ID, amt) Values(?,?,?)");
+							PreparedStatement stmt = con.prepareStatement("INSERT INTO Bid (auction_ID, user_ID, amt, manOrAuto) Values(?,?,?,?)");
 							stmt.setInt(1, auctionID);
-							stmt.setString(2, result.getString(4));
-							stmt.setFloat(3, upperLimit);
+							stmt.setString(2, bidder);
+							stmt.setFloat(3, topAutoBid + incrementPrice);
+							stmt.setInt(4,1);
 							
 							//insert notifiction for user whos upper limit was outbid 
-							PreparedStatement notific = con.prepareStatement("INSERT INTO autoBidNotific (autoBid_username, autoBidAuctionID) Values(?,?)");
+							/* PreparedStatement notific = con.prepareStatement("INSERT INTO autoBidNotific (autoBid_username, autoBidAuctionID) Values(?,?)");
 							notific.setString(1, oldTopAutoUser);
 							notific.setInt(2, auctionID);
-							
+							notific.executeUpdate(); */
 							
 							int res = stmt.executeUpdate();
 							if(res<1){
@@ -180,11 +259,19 @@
 							}
 							
 						}else{
+							//check to see if theres bids
+							//if yes check if it was auto or man
+							//notify accordingly
+							
+							
+							
+							
 							//make bid at current price plus incPrice for person with upperlimit
-							PreparedStatement stmt = con.prepareStatement("INSERT INTO Bid (auction_ID, user_ID, amt) Values(?,?,?)");
+							PreparedStatement stmt = con.prepareStatement("INSERT INTO Bid (auction_ID, user_ID, amt, manOrAuto) Values(?,?,?,?)");
 							stmt.setInt(1, auctionID);
 							stmt.setString(2, bidder);
 							stmt.setFloat(3, currentPrice + incrementPrice);
+							stmt.setInt(4,1);
 							int res = stmt.executeUpdate();
 							if(res<1){
 								out.println("Fail8");
